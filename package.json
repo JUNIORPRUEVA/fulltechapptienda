@@ -1,6 +1,22 @@
 {
+  "name": "fulltech-backend",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "prisma:generate": "prisma generate",
+    "start": "tsx src/server.ts",
+    "start:prod": "tsx src/server.ts"
+  },
   "dependencies": {
+    "@hono/node-server": "^1.19.9",
+    "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "dotenv": "^16.4.7",
+    "hono": "^4.11.4",
+    "pg": "^8.13.1",
+    "tsx": "^4.20.5"
+  },
+  "devDependencies": {
     "prisma": "^7.3.0"
   }
 }

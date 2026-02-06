@@ -12,9 +12,6 @@ COPY . .
 # Prisma
 RUN npx prisma generate
 
-# Build
-RUN npm run build
-
 # Puerto Nest
 EXPOSE 3000
 
