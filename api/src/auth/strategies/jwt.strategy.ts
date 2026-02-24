@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config'
 import { Prisma } from '@prisma/client'
 
 import { PrismaService } from '../../prisma/prisma.service'
+import { normalizeJwtSecret } from '../jwt.util'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,11 +16,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET') || 'dev_secret',
+      secretOrKey: normalizeJwtSecret(config.get<string>('JWT_SECRET')) || 'dev_secret',
     })
   }
 
-  async validate(payload: { sub: string; role: string }) {
+  async validate(payload: { sub: string; role: string; tokenType?: 'access' | 'refresh' }) {
+    if (payload.tokenType === 'refresh') {
+      throw new UnauthorizedException('Invalid token')
+    }
     const user = await this.findUserForJwt(payload.sub)
 
     if (!user) throw new UnauthorizedException('No autorizado')
